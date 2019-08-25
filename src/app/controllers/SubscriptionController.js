@@ -93,7 +93,12 @@ class SubscriptionController {
     await Mail.sendMail({
       to: `${user.name} <${user.email}>`,
       subject: 'Nova Inscrição',
-      text: 'Você tem uma nova inscrição!',
+      template: 'subscription',
+      context: {
+        organizer: meetup.user.name,
+        meetup: meetup.title,
+        user: user.name,
+      },
     });
 
     return res.json(subscription);
