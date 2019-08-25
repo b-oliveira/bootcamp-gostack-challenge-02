@@ -3,6 +3,8 @@ import User from '../models/User';
 import Meetup from '../models/Meetup';
 import Subscription from '../models/Subscription';
 
+import Mail from '../../lib/Mail';
+
 class SubscriptionController {
   async index(req, res) {
     const subscriptions = await Subscription.findAll({
@@ -86,6 +88,12 @@ class SubscriptionController {
     const subscription = await Subscription.create({
       user_id: user.id,
       meetup_id: meetup.id,
+    });
+
+    await Mail.sendMail({
+      to: `${user.name} <${user.email}>`,
+      subject: 'Nova Inscrição',
+      text: 'Você tem uma nova inscrição!',
     });
 
     return res.json(subscription);
